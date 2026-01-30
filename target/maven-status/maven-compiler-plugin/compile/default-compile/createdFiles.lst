@@ -1,0 +1,15 @@
+com\gymapp\controller\AdminController.class
+com\gymapp\entity\Member.class
+com\gymapp\repository\TrainerRepository.class
+com\gymapp\controller\MemberController.class
+com\gymapp\repository\MemberRepository.class
+com\gymapp\controller\LoginController.class
+com\gymapp\controller\TrainerController.class
+com\gymapp\entity\Admin.class
+com\gymapp\repository\AdminRepository.class
+com\gymapp\entity\Trainer.class
+com\gymapp\App.class
+com\gymapp\controller\IndexController.class
+com\gymapp\controller\LogoutController.class
+com\gymapp\repository\PlanRepository.class
+com\gymapp\entity\Plan.class
