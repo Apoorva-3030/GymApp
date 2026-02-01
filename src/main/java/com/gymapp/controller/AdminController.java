@@ -168,19 +168,45 @@ public class AdminController {
 	@PostMapping("/members/save")
 	public String saveMember(@ModelAttribute Member member) {
 
-		// Set plan details
-		if (member.getPlan() != null && member.getPlan().getId() != null) {
-			Plan plan = planRepo.findById(member.getPlan().getId()).orElse(null);
-			if (plan != null) {
-				LocalDate startDate = LocalDate.now();
-				LocalDate expiryDate = startDate.plusMonths(plan.getDuration());
+		// Check if this is an existing member
+		if (member.getId() != null) {
+			// Fetch existing member from DB
+			Member existingMember = memberRepo.findById(member.getId())
+					.orElseThrow(() -> new IllegalArgumentException("Invalid member ID"));
 
-				member.setPlan(plan);
-				member.setPlanStartDate(startDate);
-				member.setPlanExpiryDate(expiryDate);
+			// Preserve start and expiry dates unless plan is changed
+			if (member.getPlan() != null && !member.getPlan().getId().equals(existingMember.getPlan().getId())) {
+				// Plan changed -> update dates based on new plan
+				Plan plan = planRepo.findById(member.getPlan().getId()).orElse(null);
+				if (plan != null) {
+					LocalDate startDate = LocalDate.now();
+					LocalDate expiryDate = startDate.plusMonths(plan.getDuration());
+					member.setPlan(plan);
+					member.setPlanStartDate(startDate);
+					member.setPlanExpiryDate(expiryDate);
+				}
+			} else {
+				// Plan not changed -> preserve existing dates
+				member.setPlan(existingMember.getPlan());
+				member.setPlanStartDate(existingMember.getPlanStartDate());
+				member.setPlanExpiryDate(existingMember.getPlanExpiryDate());
+			}
+
+		} else {
+			// New member -> set plan dates based on selected plan
+			if (member.getPlan() != null && member.getPlan().getId() != null) {
+				Plan plan = planRepo.findById(member.getPlan().getId()).orElse(null);
+				if (plan != null) {
+					LocalDate startDate = LocalDate.now();
+					LocalDate expiryDate = startDate.plusMonths(plan.getDuration());
+					member.setPlan(plan);
+					member.setPlanStartDate(startDate);
+					member.setPlanExpiryDate(expiryDate);
+				}
 			}
 		}
 
+		// Save member
 		Member savedMember = memberRepo.save(member);
 
 		// Redirect with parameters to trigger PDF download
