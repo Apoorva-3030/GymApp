@@ -106,6 +106,24 @@ footer {
 	color: #f5f5f5;
 	font-weight: 600;
 }
+/* Fix dropdown visibility */
+.form-select {
+	background-color: rgba(255, 255, 255, 0.2);
+	color: #ffffff;
+}
+
+/* Dropdown options */
+.form-select option {
+	background-color: #ffffff;
+	color: #1a1a1a;
+}
+
+/* Selected option when dropdown is closed */
+.form-select option:checked {
+	background-color: #ffb800;
+	color: #1a1a1a;
+}
+
 </style>
 </head>
 
